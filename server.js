@@ -34,6 +34,11 @@ let assistants = [
   { id: 4, name: "Assistant 4" },
 ];
 
+// Get / (hel word)
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
 // POST /api/chat
 app.post("/api/chat", (req, res) => {
   const userMessage = req.body.message;
