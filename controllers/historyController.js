@@ -29,6 +29,7 @@ const startNewChat = (req, res) => {
 const sendMessage = (req, res) => {
   const { chatId } = req.params;
   const { message } = req.body;
+  console.log(req.file);
   const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
   // Find chat by ID
@@ -60,7 +61,7 @@ const sendMessage = (req, res) => {
     message: generateMarkdownResponse(message),
     type: "text",
     timestamp: new Date().toISOString(),
-    imageUrl: null,
+    imageUrl: imageUrl || null,
   };
 
   // Delay AI response by 2 seconds
