@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
+const { generateMarkdownResponse } = require("./utils/generateMarkDown");
 
 const app = express();
 const PORT = process.env.PORT || 3333;
@@ -39,22 +40,26 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-// POST /api/chat
+// POST /api/chat (Markdown-formatted response)
 app.post("/api/chat", (req, res) => {
   const userMessage = req.body.message;
-  const aiResponse = `Mocked response to: ${userMessage}`; // Mocked response
+  const aiResponse = generateMarkdownResponse(userMessage); // Generate Markdown response
+
   chatHistory.push({ user: userMessage, ai: aiResponse });
+
   res.json({ response: aiResponse });
 });
 
-// POST /api/chat-with-image
+// POST /api/chat-with-image (Markdown-formatted response)
 app.post("/api/chat-with-image", upload.single("image"), (req, res) => {
   const { message } = req.body;
   const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
-  res.json({
-    response: `AI Response: ${message}`,
-    imageUrl,
-  });
+
+  const aiResponse = `**AI Response for Image Upload:**  
+  - Image uploaded successfully!  
+  - Image URL: ![Uploaded Image](${imageUrl})`;
+
+  res.json({ response: aiResponse, imageUrl });
 });
 
 // GET /api/history
